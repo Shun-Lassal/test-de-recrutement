@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace App;
-
 
 class Customer
 {
@@ -23,46 +21,25 @@ class Customer
         return $this->name;
     }
 
+    // The Statement method had too many checks inside, we can split code by making methods
+    // to simplify the price and the renter points of each movie rented
     public function statement(): string {
         $totalAmount = 0.0;
         $frequentRenterPoints = 0;
         $result = "Rental Record for " . $this->getName() . "\n";
+ 
+        foreach ($this->rentals as $rental) {
+            //new behaviour in the rental Class to calculate the price of the movie depending on the movie type and the duration
+            $thisAmount = $rental->amountFor();
+            //also new behaviour in the rental Class to calculate the number of FrequentRenterPoints depending on the movie type and the duration
+            $frequentRenterPoints += $rental->getFrequentRenterPoints();
 
-        foreach ($this->rentals as $each){
-           $thisAmount = 0.0;
-
-           /* @var $each Rental */
-           // determines the amount for each line
-           switch($each->getMovie()->getPriceCode()) {
-               case Movie::REGULAR:
-                   $thisAmount += 2;
-                   if($each->getDaysRented() > 2)
-                       $thisAmount += ($each->getDaysRented() - 2) * 1.5;
-                   break;
-               case Movie::NEW_RELEASE:
-                   $thisAmount += $each->getDaysRented() * 3;
-                   break;
-               case Movie::CHILDREN:
-                   $thisAmount += 1.5;
-                   if($each->getDaysRented() > 3) {
-                       $thisAmount += ($each->getDaysRented() - 3) * 1.5;
-                   }
-                   break;
-           }
-
-           $frequentRenterPoints++;
-
-           if($each->getMovie()->getPriceCode() == Movie::NEW_RELEASE
-                && $each->getDaysRented() > 1)
-               $frequentRenterPoints++;
-
-            $result .= "\t" . $each->getMovie()->getTitle() . "\t"
-                . number_format($thisAmount, 1) . "\n";
+            // We show the price of each movie rented
+            $result .= "\t" . $rental->getMovie()->getTitle() . "\t" . number_format($thisAmount, 1) . "\n";
             $totalAmount += $thisAmount;
-
         }
-
-        $result .= "You owed " . number_format($totalAmount, 1)  . "\n";
+        // Here is the total amount of all the movies rented with the amount of frequent renter points earned
+        $result .= "Amount owed is " . number_format($totalAmount, 1)  . "\n";
         $result .= "You earned " . $frequentRenterPoints . " frequent renter points\n";
 
         return $result;

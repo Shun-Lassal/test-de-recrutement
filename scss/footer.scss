@@ -1,4 +1,6 @@
 /* Footer */
+// CSS donné
+
 #footer {
   text-shadow: 0.55rem 0.55rem #FFFFFF;
 }
@@ -22,4 +24,35 @@
 #footer .cgu__footer {
   margin: 0.5rem;
   text-shadow: 0.55rem 0.55rem #15FFF5;
+}
+
+// SCSS "refactorisé"
+// SCSS consists of avoiding repetition when targeting html id and classes
+// We dont need to specify everytime the parent if we just nest them
+// Footer is called in each declaration but when nested, the childrens don't need to specify the parent
+
+#footer {
+    text-shadow: 0.55rem 0.55rem #FFFFFF;
+  
+  
+  .form__footer {
+    margin: 1rem;
+    text-shadow: 0.55rem 0.55rem #15FFF5;
+  }
+  
+  .cgv__footer {
+    margin: 0.5rem;
+    text-shadow: 0.55rem 0.55rem #15FFF5;
+  // Same here, there was a .cgv__footer, but if the children is encapsulated, we dont need to declare it
+    .button {
+      margin: 1rem;
+      padding: 1rem;
+      font-size: 1.5rem;
+    }
+  }
+  
+  .cgu__footer {
+    margin: 0.5rem;
+    text-shadow: 0.55rem 0.55rem #15FFF5;
+  }
 }
