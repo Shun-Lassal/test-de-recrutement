@@ -64,19 +64,19 @@ function convertSize($bytes, $precision = 2) {
 
 function convertSizeFromBytes($bytes, $precision = 2)
 {
-  // Tout d'abord je verifie si les arguments sont valides (supérieurs à 0)
+  // First we check if the values are valid (i.e. positive numbers)
   if($bytes <= 0 || $precision <= 0)
   {
     return false;
   }
 
-  // Je vérifie ensuite si le nbr de bytes est inférieur à 1024, sa ne servirais à rien de convertir
+  // if the number of bytes is less than 1024 we don't need to convert anything
   if($bytes < 1024)
   {
     return $bytes . "B";
   }
 
-  // Je défini les unités dans un tableau
+  // Lets define the units in an array
   $units = array("KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "HB");
   $index = 0;
 
@@ -85,10 +85,10 @@ function convertSizeFromBytes($bytes, $precision = 2)
     $index++;
   }
 
-  // Un tableau commence par 0, donc j'enlève 1 par rapport au While()
+  // An array starts by 0, so lets remove one (because of the while loop)
   $index--;
 
-  // Je retourne la valeur convertie et j'y attribue l'unité grace à l'index
+  // we return the converted value and we set the unit thanks to the index
   return round($bytes, $precision) . " " . $units[$index];
 
 }
